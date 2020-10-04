@@ -5,11 +5,11 @@ const app = express();
 app.use(express.json());
 
 const movies= [
-    { id: 1, name: 'shawshank redemption', timings = [{time:'10:00'}, {time:'11.00'}, {time:'13:00'}, {time:'17:00'}, {time:'20:00'}]},
-    { id: 2, name: 'batman vs superman', timings = [{time:'10:00'}, {time:'11.00'}, {time:'13:00'}]},
-    { id: 3, name: 'avengers endgame', timings = [{time:'10:00'}, {time:'11.00'}, {time:'13:00'}, {time:'15:00'} ] },
-    { id: 4, name: 'harry potter', timings = [{time:'7:00'}, {time:'12.00'}, {time:'14:00'}, {time:'18:00'}]},
-    { id: 5, name: 'aquaman', timings = [{time:'12:00'}, {time:'14.00'}] },
+    { id: 1, name: 'shawshank redemption', timings : [ {time:'10:00'}, {time:'11.00'}, {time:'13:00'}, {time:'17:00'}, {time:'20:00'}]},
+    { id: 2, name: 'batman vs superman', timings : [{time:'10:00'}, {time:'11.00'}, {time:'13:00'}]},
+    { id: 3, name: 'avengers endgame', timings : [{time:'10:00'}, {time:'11.00'}, {time:'13:00'}, {time:'15:00'} ] },
+    { id: 4, name: 'harry potter', timings : [{time:'7:00'}, {time:'12.00'}, {time:'14:00'}, {time:'18:00'}]},
+    { id: 5, name: 'aquaman', timings : [{time:'12:00'}, {time:'14.00'}] },
 ];
 
 app.get('/', (req, res)=> {
@@ -38,8 +38,8 @@ app.post('/api/movies' ,(req,res) => {
 app.put('api/movies/:id', (req, res) =>{
     // look up the movie
     // if not existing, return 404
-    const { error } = validateMovie( req.body ); // result.error
-    if (error) return res.status(400).send(result.error.details[0].message);
+    const movie = movies.find(m => m.id === parseInt( req.params.id )); 
+    if (!movie) return res.status(404).send('The movie with the given id is not found.');
     //validate
     //if invalid, return 400 - bad request
     const { error } = validateMovie( req.body ); // result.error
@@ -53,8 +53,8 @@ app.put('api/movies/:id', (req, res) =>{
 app.delete('api/movies/;id', (req, res) => {
     //look up the movie
     //not existing, return 404
-    const { error } = validateMovie( req.body ); // result.error
-    if (error) return res.status(400).send(result.error.details[0].message);
+    const movie = movies.find(m => m.id === parseInt( req.params.id )); 
+    if (!movie) return res.status(404).send('The movie with the given id is not found.');
     //delete
     const index = movies.indexOf(movie);
     movies.splice(index, 1);
